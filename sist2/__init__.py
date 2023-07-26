@@ -32,7 +32,7 @@ class Sist2Index:
 
         return Sist2Descriptor(*self.cur.fetchone())
 
-    def get_thumbnail(self, id: str) -> bytes:
+    def get_thumbnail(self, id: str) -> bytes | None:
         """
         :param id: Document id
         :return: Thumbnail data
