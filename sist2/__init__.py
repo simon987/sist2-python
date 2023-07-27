@@ -4,13 +4,26 @@ import os
 import json
 from collections import namedtuple
 
-Sist2Descriptor = namedtuple("Sist2Descriptor", (
+_Sist2Descriptor = namedtuple("Sist2Descriptor", (
     "id", "version_major", "version_minor", "version_patch", "root", "name", "rewrite_url", "timestamp"
 ))
 
-Sist2Document = namedtuple("Sist2Document", (
+
+class Sist2Descriptor(_Sist2Descriptor):
+    """
+    Sist2 index descriptor
+    """
+
+
+_Sist2Document = namedtuple("Sist2Document", (
     "id", "version", "mtime", "size", "json_data", "rel_path", "path"
 ))
+
+
+class Sist2Document(_Sist2Document):
+    """
+    Sist2 document - instantiated by sist2.Sist2Index.document_iter
+    """
 
 
 class Sist2Index:
