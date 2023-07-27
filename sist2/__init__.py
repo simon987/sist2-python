@@ -97,8 +97,7 @@ class Sist2Index:
         :param id: Model ID,
         :param name: Name of the model, must be maximum 15 characters
         :param url: HTTP(s) url to the model for inference in the web UI, in .onnx format.
-        :param path: Elasticsearch path. Must begin with `idx_512.` for indexed dense vector (max 1024-dim) or `512.`
-        for dense vectors (replace 512 with the size).
+        :param path: Elasticsearch path. Must begin with `idx_512.` for indexed dense vector (max 1024-dim) or `512.` for dense vectors (replace 512 with the size).
         :param size: Size of the embedding in dimensions.
         :param type: Must be either 'flat' (one embedding per document) or 'nested' (multiple embeddings per document).
         """
