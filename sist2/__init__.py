@@ -65,6 +65,7 @@ class Sist2Index:
     def document_iter(self, where: str):
         """
         Iterate documents
+
         :param where: SQL WHERE clause (ex. 'size > 100')
         :return: generator
         """
@@ -119,7 +120,7 @@ class Sist2Index:
             (id, name, url, path, size, type)
         )
 
-    def upsert_embedding(self, id: str, start: int, end: int, model_id: int, embedding: bytes) -> None:
+    def upsert_embedding(self, id: str, start: int, end: int | None, model_id: int, embedding: bytes) -> None:
         """
         Upsert an embedding
 
@@ -139,6 +140,7 @@ class Sist2Index:
     def update_document(self, doc: Sist2Document) -> None:
         """
         Update a document
+
         :param doc: document
         """
         self.cur.execute(
@@ -159,7 +161,7 @@ class Sist2Index:
         self.cur.execute(
             "REPLACE INTO tag SELECT document.id, json_each.value FROM document, json_each(document.json_data->>'tag')")
 
-    def commit(self):
+    def commit(self) -> None:
         """
         Commit changes to the database
         """
@@ -175,3 +177,22 @@ def serialize_float_array(array) -> bytes:
         struct.pack("f", x)
         for x in array
     )
+
+
+def print_progress(done: int = 0, count: int = 0, waiting: bool = False) -> None:
+    """
+    Send current progress to sist2-admin. It will be displayed in the Tasks page
+
+    :param done: Number of files processed
+    :param count: Total number of files to process (including files that have been processed)
+    :param waiting: Whether the script is still discovering new files to process
+    :return:
+    """
+
+    progress = {
+        "done": done,
+        "count": count,
+        "waiting": waiting
+    }
+
+    print(f"$PROGRESS {json.dumps(progress)}")
