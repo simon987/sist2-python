@@ -37,6 +37,47 @@ class Sist2Index:
         self.cur = self.conn.cursor()
         self.last_id = None
         self.descriptor = self._get_descriptor()
+        self._setup_kv()
+
+    def _setup_kv(self):
+        self.cur.execute(
+            "CREATE TABLE IF NOT EXISTS kv ("
+            "   key TEXT PRIMARY KEY,"
+            "   value TEXT"
+            ")"
+        )
+
+    def get(self, key: str):
+        """
+        Get value from key-value table. This is used to store configuration or state in user scripts.
+
+        :param key: Key
+        :return: Value or None
+        """
+
+        self.cur.execute(
+            "SELECT value from kv WHERE key=?", (key,)
+        )
+
+        row = self.cur.fetchone()
+        if row:
+            return row[0]
+
+        return None
+
+    def set(self, key: str, value: str | int) -> None:
+        """
+        Set value in key-value table.
+
+        :param key: Key
+        :param value: Value
+        """
+
+        self.cur.execute(
+            "INSERT INTO kv (key, value) VALUES (?,?)", (key, value)
+        )
+
+        return None
 
     def _get_descriptor(self) -> Sist2Descriptor:
         self.cur.execute(
