@@ -74,12 +74,13 @@ class Sist2Index:
             ")"
         )
 
-    def get(self, key: str):
+    def get(self, key: str, default=None):
         """
         Get value from key-value table. This is used to store configuration or state in user scripts.
 
         :param key: Key
-        :return: Value or None
+        :param default: Default value to return if not found
+        :return: Value or default
         """
 
         self.cur.execute(
@@ -90,7 +91,7 @@ class Sist2Index:
         if row:
             return row[0]
 
-        return None
+        return default
 
     def set(self, key: str, value: str | int) -> None:
         """
