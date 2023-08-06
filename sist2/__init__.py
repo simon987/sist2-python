@@ -102,7 +102,7 @@ class Sist2Index:
         """
 
         self.cur.execute(
-            "INSERT INTO kv (key, value) VALUES (?,?)", (key, value)
+            "REPLACE INTO kv (key, value) VALUES (?,?)", (key, value)
         )
 
         return None
