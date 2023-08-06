@@ -84,7 +84,8 @@ class Sist2Index:
             where = f"WHERE document.id > ? AND {where}"
             args = (self.last_id,)
         else:
-            args = []
+            where = f"WHERE document.id > ?"
+            args = (self.last_id,)
 
         self.cur.execute(
             f"SELECT document.id, version, mtime, size, json_data FROM document"
