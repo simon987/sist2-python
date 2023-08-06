@@ -280,19 +280,18 @@ def serialize_float_array(array) -> bytes:
     )
 
 
-def print_progress(done: int = 0, count: int = 0, waiting: bool = False) -> None:
+def print_progress(done: int = 0, count: int = 0) -> None:
     """
     Send current progress to sist2-admin. It will be displayed in the Tasks page
 
     :param done: Number of files processed
     :param count: Total number of files to process (including files that have been processed)
-    :param waiting: Whether the script is still discovering new files to process
     """
 
     progress = {
         "done": done,
         "count": count,
-        "waiting": waiting
+        "waiting": True
     }
 
     print(f"$PROGRESS {json.dumps(progress)}")
