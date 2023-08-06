@@ -62,6 +62,25 @@ class Sist2Index:
 
         return row[0]
 
+    def document_count(self, where: str = "") -> int:
+        """
+        Count the number of documents in the index
+
+        :param where: SQL WHERE clause (ex. 'size > 100')
+        :return: Number of documents in the index
+        """
+
+        if where:
+            where = f"WHERE {where}"
+
+        self.cur.execute(
+            f"SELECT COUNT(*) FROM document"
+            f" {where}"
+        )
+
+        row = self.cur.fetchone()
+        return row[0]
+
     def document_iter(self, where: str = ""):
         """
         Iterate documents
@@ -81,7 +100,7 @@ class Sist2Index:
             where = f"WHERE {where}" if where else ""
             args = []
         elif where:
-            where = f"WHERE document.id > ? AND {where}"
+            where = f"WHERE document.id > ? AND ({where})"
             args = (self.last_id,)
         else:
             where = f"WHERE document.id > ?"
@@ -189,7 +208,6 @@ def print_progress(done: int = 0, count: int = 0, waiting: bool = False) -> None
     :param done: Number of files processed
     :param count: Total number of files to process (including files that have been processed)
     :param waiting: Whether the script is still discovering new files to process
-    :return:
     """
 
     progress = {
