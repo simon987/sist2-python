@@ -80,9 +80,11 @@ class Sist2Index:
         if self.last_id is None:
             where = f"WHERE {where}" if where else ""
             args = []
-        else:
-            where = f"WHERE document.id > ? AND {where}" if where else ""
+        elif where:
+            where = f"WHERE document.id > ? AND {where}"
             args = (self.last_id,)
+        else:
+            args = []
 
         self.cur.execute(
             f"SELECT document.id, version, mtime, size, json_data FROM document"
