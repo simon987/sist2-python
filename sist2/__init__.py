@@ -1,8 +1,20 @@
+import json
+import os
 import sqlite3
 import struct
-import os
-import json
 from collections import namedtuple
+from typing import List
+
+_Sist2Version = namedtuple("Sist2Version", (
+    "id", "date"
+))
+
+
+class Sist2Version(_Sist2Version):
+    """
+    Sist2 index version. (starts at version 1, is incremented by one for each incremental scan)
+    """
+
 
 _Sist2Descriptor = namedtuple("Sist2Descriptor", (
     "id", "version_major", "version_minor", "version_patch", "root", "name", "rewrite_url", "timestamp"
@@ -36,8 +48,23 @@ class Sist2Index:
         self.conn = sqlite3.connect(filename)
         self.cur = self.conn.cursor()
         self.last_id = None
-        self.descriptor = self._get_descriptor()
+        self._descriptor = self._get_descriptor()
+        self._versions = self._get_versions()
         self._setup_kv()
+
+    @property
+    def descriptor(self) -> Sist2Descriptor:
+        """
+        :return: Index descriptor
+        """
+        return self._descriptor
+
+    @property
+    def versions(self) -> List[Sist2Version]:
+        """
+        Get index version history (starts at 1, is incremented after each incremental scan)
+        """
+        return self._versions
 
     def _setup_kv(self):
         self.cur.execute(
@@ -85,6 +112,16 @@ class Sist2Index:
         )
 
         return Sist2Descriptor(*self.cur.fetchone())
+
+    def _get_versions(self) -> list:
+        self.cur.execute(
+            "SELECT id, date FROM version ORDER BY id"
+        )
+
+        return [
+            Sist2Version(*row)
+            for row in self.cur.fetchall()
+        ]
 
     def get_thumbnail(self, id: str) -> bytes | None:
         """
