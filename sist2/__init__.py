@@ -62,7 +62,7 @@ class Sist2Index:
 
         return row[0]
 
-    def document_iter(self, where: str):
+    def document_iter(self, where: str = ""):
         """
         Iterate documents
 
