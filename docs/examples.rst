@@ -15,3 +15,4 @@ Update all documents with the 'hamburger' tag. ::
     index.commit()
 
     print("Done!")
+Augment images with OpenAI CLIP embeddings: <https://github.com/simon987/sist2-script-clip>
