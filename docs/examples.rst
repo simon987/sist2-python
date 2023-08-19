@@ -16,3 +16,5 @@ Update all documents with the 'hamburger' tag. ::
 
     print("Done!")
 Augment images with OpenAI CLIP embeddings: https://github.com/simon987/sist2-script-clip
+
+Augment audio/video files with OpenAI Whisper transcripts: https://github.com/simon987/sist2-script-whisper
