@@ -51,6 +51,8 @@ class Sist2Index:
             self.conn.enable_load_extension(True)
             self.conn.load_extension("~/json1.so")
 
+        self.cur = self.conn.cursor()
+
         self.last_id = None
         self._descriptor = self._get_descriptor()
         self._versions = self._get_versions()
