@@ -47,10 +47,6 @@ class Sist2Index:
         self.filename = filename
         self.conn = sqlite3.connect(filename)
 
-        if os.path.exists("/root/json1.so"):
-            self.conn.enable_load_extension(True)
-            self.conn.load_extension("/root/json1.so")
-
         self.cur = self.conn.cursor()
 
         self.last_id = None
@@ -266,7 +262,8 @@ class Sist2Index:
         """
         self.cur.execute("DELETE FROM tag")
         self.cur.execute(
-            "REPLACE INTO tag SELECT document.id, json_each.value FROM document, json_each(document.json_data->>'tag')")
+            "REPLACE INTO tag SELECT document.id, json_each.value "
+            "FROM document, json_each(json_extract(document.json_data, '$.tag'))")
 
     def commit(self) -> None:
         """
