@@ -47,9 +47,9 @@ class Sist2Index:
         self.filename = filename
         self.conn = sqlite3.connect(filename)
 
-        if os.path.exists("~/json1.so"):
+        if os.path.exists("/root/json1.so"):
             self.conn.enable_load_extension(True)
-            self.conn.load_extension("~/json1.so")
+            self.conn.load_extension("/root/json1.so")
 
         self.cur = self.conn.cursor()
 
