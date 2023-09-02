@@ -28,7 +28,7 @@ class Sist2Descriptor(_Sist2Descriptor):
 
 
 _Sist2Document = namedtuple("Sist2Document", (
-    "id", "version", "mtime", "size", "json_data", "rel_path", "path"
+    "id", "version", "mtime", "size", "json_data", "rel_path", "path", "mime", "parent"
 ))
 
 
@@ -188,7 +188,8 @@ class Sist2Index:
             args = (self.last_id,)
 
         self.cur.execute(
-            f"SELECT document.id, version, mtime, size, json_data FROM document"
+            f"SELECT document.id, version, mtime, size, json_data, (SELECT name FROM mime WHERE id=document.mime), parent "
+            f"FROM document"
             f" {where}"
             f" ORDER BY document.id LIMIT 1",
             args
@@ -205,7 +206,7 @@ class Sist2Index:
 
         self.last_id = row[0]
 
-        return Sist2Document(row[0], row[1], row[2], row[3], j, rel_path, path)
+        return Sist2Document(row[0], row[1], row[2], row[3], j, rel_path, path, row[5], row[6])
 
     def register_model(self, id: int, name: str, url: str, path: str, size: int, type: str) -> None:
         """
